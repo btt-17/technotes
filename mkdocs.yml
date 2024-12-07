@@ -1,6 +1,18 @@
 site_name: btt
+repo_url: https://github.com/btt-17/technotes
+edit_uri: blob/main/docs/
 nav:
   - Home: index.md
   - Web Development:
       - SSR và CSR: web/ssr-and-csr.md
-theme: readthedocs
+theme:
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - javascript
+    - python
+    - html
+    - java
+
+copyright: Copyright &copy; 2024 btt
