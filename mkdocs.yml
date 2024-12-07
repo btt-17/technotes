@@ -1,0 +1,6 @@
+site_name: btt
+nav:
+  - Home: index.md
+  - Web Development:
+      - SSR và CSR: web/ssr-and-csr.md
+theme: readthedocs
