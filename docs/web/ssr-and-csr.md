@@ -65,7 +65,7 @@ thứ hạng của nó trên các công cụ tìm kiếm. Một trang web có SE
 cũng là một yếu tố quan trọng cần xem xét khi mình muốn xây dựng một trang web có nhiều lượng truy cập. 
 
 Quay về hai phương thức kể trên, với CSR nội dung của trang web chỉ được hiển thị sau khi thực thi JavaScript. Trong thời gian
-đợi cho JavaScript thực thi thành công, thì nội dung của trang sẽ trống, dẫn đến việc các công cụ tìm kiếm không thu thập đủ 
+đợi cho JavaScript thực thi thành công, nội dung của trang sẽ trống, dẫn đến việc các công cụ tìm kiếm không thu thập đủ 
 những nội dung cần thiết. Điều này làm cho SEO của trang web sẽ kém đi. Một số giải pháp là pre-rendering hoặc hydration. Tuy nhiên
 nếu tệp JavaScript của bạn nhỏ thì có thể không cần quan tâm đến vấn đề này.
 
@@ -80,16 +80,16 @@ Ngược lại, SSR cho phép hiển thị nội dung lần đầu tiên sớm h
 cũng khá khó để đánh giá phương pháp nào cung cấp trải nghiệm tốt hơn cho người dùng. Điều này có thể phụ thuộc vào nghiệp vụ, hay tính
 chất của từng trang web.
 
-Nếu trang web của mình có nhiều tương tác động, thì CSR có thể là lựa chọn phù hợp hơn. Nếu muốn nội dung trang web muốn hiển thị 
+Nếu trang web của mình có nhiều tương tác động, CSR có thể là lựa chọn phù hợp hơn. Nếu muốn nội dung trang web muốn hiển thị 
 đến người dùng sớm hơn, mình có thể dùng SSR.
 
 ## Chi phí phát triển và vận hành
 
 Khi dùng CSR, việc xử lý kết xuất nội dung của trang được đẩy về phía client nên không tiêu tốn nhiều tài nguyên của server. Trong khi đó
-với SSR, việc xử lý đó được thực hiện phía server, điều này đòi hỏi chúng ta cần tối ưu quá trình xử lý đó bên server. Điều này có thể dẫn 
-đến chi phí cho phát triển và vận hành SSR sẽ cao hơn so với CSR.
+với SSR, việc xử lý đó được thực hiện phía server, vì thế chúng ta cần phải tối ưu nó. Điều này có thể dẫn đến chi phí cho phát triển và 
+vận hành SSR sẽ cao hơn so với CSR.
 
-Từ điều này ta có thể thấy, nếu mình không có đủ tài nguyên phía server thì nên chọn CSR thay vì SSR. Nếu tài nguyên server không phải là vấn 
+Từ đó ta có thể thấy, nếu mình không có đủ tài nguyên phía server thì nên chọn CSR thay vì SSR. Nếu tài nguyên server không phải là vấn 
 đề, bạn có thể dùng SSR.
 
 # Tài liệu tham khảo
