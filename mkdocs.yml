@@ -5,6 +5,7 @@ nav:
   - Home: index.md
   - Web Development:
       - SSR và CSR: web/ssr-and-csr.md
+      - Tìm hiểu về nginx: web/nginx.md
 theme:
   name: readthedocs
   highlightjs: true
@@ -14,5 +15,5 @@ theme:
     - python
     - html
     - java
-
+    - properties
 copyright: Copyright &copy; 2024 btt
