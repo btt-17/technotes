@@ -1,0 +1,3 @@
+url: "https://btt-17.github.io/technotes"
+plugins:
+  - jekyll-sitemap
