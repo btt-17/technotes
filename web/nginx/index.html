@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Tìm hiểu về nginx - btt</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "T\u00ecm hi\u1ec3u v\u1ec1 nginx";
+        var mkdocs_page_input_path = "web/nginx.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/javascript.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/html.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/properties.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> btt
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Web Development</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../ssr-and-csr/">SSR và CSR</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Tìm hiểu về nginx</a>
+    <ul class="current">
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">btt</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Web Development</li>
+      <li class="breadcrumb-item active">Tìm hiểu về nginx</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/btt-17/technotes/blob/main/docs/web/nginx.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p>Trong bài này chúng ta sẽ tìm hiểu về nginx, nhằm trả lời cho hai câu hỏi cơ bản:</p>
+<ul>
+<li>nginx là gì?</li>
+<li>Cài đặt cấu hình nginx như nào?</li>
+</ul>
+<p>Vì nội dung tập trung về khía cạnh kỹ thuật của nginx, nên mình sẽ lược bỏ những nội dung liên 
+quan đến tác giả, cột mốc, hay lịch sử phát triển.
+Bạn có thể xem những thông tin đó và cách cài đặt <a href="https://nginx.org/en/docs">ở đây</a>.</p>
+<p>Lưu ý bạn nên nắm vững một số khái niệm cơ bản liên quan đến nginx trước bao gồm:</p>
+<ul>
+<li>HTTP Web Server</li>
+<li>Reverse Proxy</li>
+<li>Load Balancer</li>
+<li>Content Cache</li>
+<li>TCP/UDP Proxy Server</li>
+<li>Mail Proxy Server</li>
+</ul>
+<p>Để thuận tiện, trong bài viết này mình cũng sẽ tóm tắt những nội dung mình nghĩ là cần thiết phải biết của 
+những khái niệm đã nêu ra ở trên.</p>
+<h1 id="http-web-server-la-gi">HTTP Web Server là gì?</h1>
+<p>HTTP Web Server hay máy chủ HTTP là một phần mềm hay máy tính giao tiếp với client thông qua phương thức 
+HTTP (HyperText Trasfer Protocol)/HTTPS. Cụ thể, server sẽ tiếp nhận những yêu cầu (request) từ client, sau đó xử 
+lý và gửi lại phản hồi (response) trở lại client. </p>
+<p><img alt="HTTP Web Server" src="../httpserver.png" /></p>
+<p><em><a href="https://www.oreilly.com/library/view/hands-on-network-programming/9781789349863/c099d1ac-9bb2-46cb-9222-339617015438.xhtml">The HTTP server</a></em></p>
+<p>Để đáp ứng được những xử lý trên, HTTP Server cần có những tính năng sau đây:</p>
+<ul>
+<li>
+<p>Hỗ trợ giao tiếp HTTP cơ bản</p>
+</li>
+<li>
+<p>Xử lý nội dung tĩnh và động</p>
+</li>
+<li>
+<p>Hỗ trợ bảo mật: Mã hoá dữ liệu trao đổi giữa server và client với SSL/TLS.</p>
+</li>
+<li>Logging: ghi lại nhật ký truy cập, xử lý hay lỗi.</li>
+<li>v.v</li>
+</ul>
+<h1 id="reverse-proxy-la-gi">Reverse Proxy là gì?</h1>
+<p>Reverse Proxy server hay máy chủ Proxy là máy chủ trung gian giữa client và server đích. Khi client gửi yêu cầu ,
+yêu cầu sẽ đi qua máy chủ proxy trước khi được chuyển tiếp đến server đích. Ở chiều ngược lại, khi server 
+gửi lại phản hồi đến client cũng phải đi qua proxy server rồi mới đến client. </p>
+<p><img alt="Reverse Proxy" src="../reverseproxy.png" /></p>
+<p><em><a href="https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/">Reverse Proxy Flow</a></em></p>
+<p>Vì sao lại cần sử dụng server trung gian như proxy server? Reverse Proxy server sẽ cung cấp cho chúng ta
+những tính năng như sau:</p>
+<ul>
+<li><strong>Bảo mật</strong>: Ẩn thông tin của server đích, tránh những cuộc tấn công như DDoS.</li>
+<li><strong>Quản lý truy cập</strong>: Kiểm soát, giám sát và hạn chế truy cập từ internet đến server đích.</li>
+<li><strong>Quản lý lưu lượng</strong>: Phân bố lưu lượng đến các server khác nhau (cân bằng tải - Load Balancer)</li>
+<li><strong>Bộ nhớ đệm (Caching)</strong>: Lưu trữ tạm các dữ liệu hay các tệp như html, css, .v.v nhằm cải thiện hiệu năng.</li>
+<li>v.v</li>
+</ul>
+<h1 id="load-balancer-la-gi">Load Balancer là gì</h1>
+<p>Load Balancer hay cân bằng tải được dùng để điều chỉnh lưu lượng truy cập (traffic) đến nhiều server (máy chủ)
+khác nhau trong hệ. Điều này nhằm đảm bảo hiệu năng, tính sẵn sàng và độ tin cậy của hệ thống. Tránh trường hợp server 
+nào đó bị quá tải và không thể phản hồi về client.</p>
+<p>Ngoài ra khi sử dụng Load Balancer, chúng ta có thể dễ dàng thêm bớt số lượng trong hệ thống.</p>
+<h1 id="content-cache">Content Cache</h1>
+<p>Content Cache hay bộ nhớ đệm nội dung được dùng để lưu trữ tạm thời những nội dung đã được lấy từ server, nhằm tránh
+việc phải tải lại những nội dung đó mỗi khi có yêu cầu. Mục tiêu của Cache nhằm tăng tốc độ truy cập, và giảm tải 
+cho các server.</p>
+<h1 id="tcpudp-proxy-server">TCP/UDP Proxy Server</h1>
+<p>TCP/UDP Proxy là proxy server trung gian giữa client và server đích. Server này xử lý các kết nối TCP và UDP.</p>
+<h1 id="mail-proxy-server">Mail Proxy Server</h1>
+<p>Mail Proxy Server là một loại proxy server dùng để quản lý và chuyển tiếp mail giữa server gửi và server nhận 
+thông qua các protocol SMTP, IMAP, POP3. </p>
+<h1 id="nginx-la-gi">nginx là gì?</h1>
+<p>nginx (hay engine x) là một mã nguồn mở, được sử dụng như một HTTP web server. Ngoài ra nó cũng có thể 
+dùng như Reverse Proxy, Load Balancer, Content Cache, TCP/UDP Proxy Server hay Mail Proxy Server giúp tối ưu hoá 
+hiệu năng của ứng dụng.</p>
+<p>Nếu bạn nắm vững những khái niệm kể trên, thì nginx có thể hiểu đơn giản là nó sẽ thực hiện được hết những tính năng đó.</p>
+<h1 id="mot-so-cach-cai-at-cau-hinh-nginx-co-ban">Một số cách cài đặt cấu hình nginx cơ bản</h1>
+<p>Vì mình dùng máy mac nên những cài đặt dưới đây sẽ dựa trên môi trường của mac.</p>
+<p>Kiểm tra tệp (file) cài đặt cấu hình:</p>
+<pre><code class="language-commandline">% sudo nginx -t
+nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
+
+$ sudo nano /opt/homebrew/etc/nginx/nginx.conf
+</code></pre>
+<h2 id="cau-hinh-mau">Cấu hình mẫu</h2>
+<p>Chúng ta sẽ tìm hiểu về cấu trúc của tệp cài đặt cấu hình qua cấu hình mẫu dưới dây. </p>
+<pre><code class="language-properties">user nobody; # a directive in the 'main' context
+
+# Cấu hình sự kiện
+events {
+    # configuration of connection processing
+}
+
+# Cấu hình HTTP
+http {
+    # Configuration specific to HTTP and affecting all virtual servers
+
+    server {
+        # configuration of HTTP virtual server 1
+        location /one {
+            # configuration for processing URIs starting with '/one'
+        }
+        location /two {
+            # configuration for processing URIs starting with '/two'
+        }
+    }
+
+    server {
+        # configuration of HTTP virtual server 2
+    }
+}
+
+stream {
+    # Configuration specific to TCP/UDP and affecting all virtual servers
+    server {
+        # configuration of TCP virtual server 1
+    }
+}
+</code></pre>
+<p>nginx bao gồm nhiều modules được điều khiển bởi những directives được định nghĩa trong tệp config 
+(ví dụ: /opt/homebrew/etc/nginx/nginx.conf). Những directives này được chia ra làm hai loại: simple directive 
+và block directive. </p>
+<p>Ở trong cấu hình mẫu, <code>user nobody;</code> là một simple directive. Như thế ta có thể simple directive sẽ bao gồm tên 
+<code>user</code>, biến <code>nobody</code> và dấu chấm phẩy <code>;</code> kết thúc directive. Còn với block directive, thay vì kết thúc với 
+dấu chấm phẩy <code>;</code>, nó sử dụng <code>{}</code> và khai báo cài đặt ở bên trong. Ví dụ về block directive là <code>events {...}</code>.
+Nếu một block directive có chứa nhiều block directive khác thì nó được gọi là <code>context</code>. <code>http{...}</code> và 
+<code>stream {...}</code> là những context. Ngoài ra nếu một directive không nằm trong một block directive nào đó, nó sẽ
+được coi là nằm trong <code>main context</code>.</p>
+<p><code>http {...}</code>, <code>server {...}</code> và <code>location {...}</code> là những core directive của nginx. 
+<code>http {...}</code> được dùng để cài đặt cấu hình của HTTP server. Còn cấu hình của server ảo (virtual server) được
+cài đặt ở <code>server {...}</code>. <code>location {}</code> sẽ chứa những cấu hình phụ thuộc vào URI của yêu cầu (request URI).</p>
+<h2 id="cung-cap-noi-dung-tinh-static-content">Cung cấp nội dung tĩnh (static content)</h2>
+<p>Ở đây mình sẽ thử cài đặt cấu hình cho phép server có thể cung cấp những nội dung tĩnh.</p>
+<p>Tạo file và folder:</p>
+<pre><code class="language-commandline"># Tạo folder để lưu file tĩnh như html
+$ mkdir var/www
+$ mkdir var/www/test
+
+# Tạo file html
+$ touch var/www/test/index.html
+
+# Tạo folder để lưu ảnh
+$ mkdir var/images
+
+# Thêm file var/images/example.jpg
+</code></pre>
+<p>Lúc này ta có 2 folders có chữa những nội dung tĩnh trong ví dụ này là một file html và một file ảnh.
+Tiếp theo, chúng ta sẽ thử cài đặt hai context <code>location {...}</code> như dưới đây.</p>
+<pre><code class="language-properties">http {
+    server { 
+      location / {
+          root /var/www;
+      }
+
+      location /images/ { 
+          root /var;
+      }
+    }
+}
+</code></pre>
+<p>Với cấu hình cài đặt này, vì mình không cài đặt port nên mặc định server sẽ nhận thông tin từ port 80. 
+Khi có yêu cầu (request) gửi đến server mà URI của nó bắt đầu với <code>/images/</code>, server 
+sẽ gửi những file nằm trong thư mục <code>/var/images</code>. Ví dụ khi người dùng truy cập <code>http://localhost/images/example.jpg</code>, 
+server sẽ trả tệp ảnh <code>var/images/example.jpg</code>. Với những yêu cầu có URI không bắt đầu với <code>/images/</code>, server sẽ tự động 
+gửi những tệp từ thư mục <code>var/www</code>. Ví dụ khi truy cập <code>http://localhost/test/index.html</code>, server sẽ trả lại tệp 
+<code>var/www/test/index.html</code>. Trong trường hợp server không thể tìm được file tương ứng, nó sẽ phản hồi lại với lỗi 404.
+Trên đây là ví dụ về cách cài đặt cho phép server có thể cung cấp được những nội dung tĩnh đến client.</p>
+<p>Để khởi động lại cấu hình, chúng ta có thể sử dụng câu lệnh dưới đây.</p>
+<pre><code class="language-commandline">$ nginx -s reload
+</code></pre>
+<h2 id="cai-at-cau-hinh-proxy">Cài đặt cấu hình Proxy</h2>
+<p>Phần này, mình sẽ tìm hiểu về cách cài đặt một proxy server đơn giản. Đầu tiên chúng ta sẽ thêm một server ảo vào
+cấu hình ở ví dụ trên.</p>
+<pre><code class="language-properties">http {
+    server { 
+      location / {
+          root /var/www;
+      }
+
+      location /images/ { 
+          root /var;
+      }
+    }
+
+    # Thêm cấu hình server mới 
+    server {
+        listen 8080;
+        root /var/up1;
+
+        location / {
+        }
+    }
+}
+</code></pre>
+<p>Server được thêm mới này sẽ nhận được những yêu cầu gửi đến port 8080, và sẽ tìm những dữ liệu nằm trong thư mục <code>var/up1</code>.
+Vì server chưa có thư mục này, ta có thể tạo thư mục và thêm file với những câu lệnh sau:</p>
+<pre><code class="language-commandline">$ mkdir var/up1
+$ touch var/up1/index.html
+</code></pre>
+<p>Tiếp theo chúng ta sử dụng <code>proxy_pass</code> và chỉnh sửa <code>location / {...}</code> ở mục trước.</p>
+<pre><code class="language-properties">http {
+    server { 
+      location / {
+          proxy_pass http://localhost:8080;
+      }
+
+      location /images/ { 
+          root /var;
+      }
+    }
+
+    # Thêm cấu hình server mới 
+    server {
+        listen 8080;
+        root /var/up1;
+
+        location / {
+        }
+    }
+}
+</code></pre>
+<p>Lúc này, nếu chúng ta gửi yêu cầu (request) đến địa chỉ <code>http://localhost</code> và URI không bắt đầu với <code>/images/</code>, 
+những yêu cầu này sẽ được gửi qua proxy server. </p>
+<h2 id="cai-at-cau-hinh-load-balancer">Cài đặt cấu hình Load Balancer</h2>
+<p>Chúng ta sẽ qua một ví dụ khác về cách cài đặt cấu hình cân bằng tải - Load Balancer. Mình có cấu hình được cài đặt
+như sau:</p>
+<pre><code class="language-properties">http {
+    upstream backend {
+        server backend1.example.com;
+        server backend2.example.com;
+        server 192.0.0.1 backup;
+    }
+
+    server {
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+}
+</code></pre>
+<p>Ở đây, cầu hình này có sử dụng <code>proxy_pass</code> cho phép server chuyển tất cả những yêu cầu đến group server có tên là <code>backend</code>
+(tên này thì đặt thế nào cũng được). Group này có chứa ba server là <code>backend1.example.com</code>, <code>backend2.example.com</code> và 
+<code>192.0.0.1</code>. Vì cấu hình này không chỉ rõ thuật toán nào được sử dụng để dùng cho việc quản lý lưu lượng truy cập, nên 
+server sẽ sử dụng thuật toán mặc định là <a href="https://www.geeksforgeeks.org/load-balancing-algorithms/#11-round-robin-load-balancing-algorithms">Round Robin</a>.
+Có một lưu ý, tuy mình có 3 server trong group, như server <code>192.0.0.1</code> được cài đặt là backup nên nó chỉ hoạt động khi hai 
+server còn lại không thể hoạt động. </p>
+<p>Tiếp theo chúng ta sẽ thử cài đặt thêm <code>weight</code> như sau:</p>
+<pre><code class="language-properties">http {
+    upstream backend {
+        server backend1.example.com weight=5;
+        server backend2.example.com;
+        server 192.0.0.1 backup;
+    }
+
+    server {
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+}
+</code></pre>
+<p>Lúc này cứ 6 yêu cầu được gửi đến server, thì 5 trong số đó sẽ được gửi đến <code>backend1.example.com</code> và 1 yêu cầu sẽ đến 
+<code>backend2.example.com</code>. </p>
+<p>Trên đây là ví dụ về một cân bằng tải đơn giản. Bạn có thể xem thêm những cách cài đặt khác <a href="https://docs.nginx.com/nginx/admin-guide/load-balancer/">ở đây</a>.</p>
+<h1 id="tong-ket">Tổng kết</h1>
+<p>Trong bài này chúng ta đã tìm hiểu về những khái niệm cơ bản của ngix cùng những khái niệm liên quan khác. Ngoài ra thì 
+mình cũng có thêm những ví dụ về một số cách cài đặt cấu hình đơn giản. Hy vọng nó có thể giúp ích cho chính bản thân mình,
+hay ai đó đọc được bài viết này khi sử dụng nginx.</p>
+<h1 id="tai-lieu-tham-khao">Tài liệu tham khảo</h1>
+<ul>
+<li><a href="https://nginx.org/en/docs/beginners_guide.html">Beginner’s Guide</a></li>
+<li><a href="https://docs.nginx.com/nginx/admin-guide/basic-functionality/managing-configuration-files/">Creating NGINX Plus and NGINX Configuration Files</a></li>
+<li><a href="https://docs.nginx.com/nginx/admin-guide/load-balancer/">Load Balancer</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../ssr-and-csr/" class="btn btn-neutral float-left" title="SSR và CSR"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2024 btt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/btt-17/technotes" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../ssr-and-csr/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
